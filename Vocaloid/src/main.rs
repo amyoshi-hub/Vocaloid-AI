@@ -1,6 +1,7 @@
 use hound::{WavReader, WavWriter, WavSpec, SampleFormat};
-use std::io::Write;
-mod roma_parser::split_romaji;
+use std::io::{self, Write};
+mod roma_parser;
+use roma_parser::split_romaji;
 
 fn wav_shorter(input_path: &str, output_path: &str, ratio: f32) -> hound::Result<()> {
     let mut reader = WavReader::open(input_path)?;
@@ -43,15 +44,28 @@ fn adjust_pitch(input_path: &str, output_path: &str, pitch_ratio: f32) -> hound:
 }
 
 
-fn createWav(input_string: &str) -> Result<()> {
+fn createWav(input_string: &str) -> hound::Result<()> {
     let mut input_files: Vec<String> = Vec::new();
     let syllables = split_romaji(input_string);
-    for s in input_string.chars() {
-        if ch == ' ' {
-            input_files.push("voice/silence.wav".to_string());
+    
+    std::fs::create_dir_all("tmp")?;
+
+    for (i, s) in syllables.iter().enumerate() {
+        if s == " " {
+
+            let ori_file = format!("voice/silence.wav");
+            let temp = format!("voice/__{}.wav", i);
+            wav_shorter(&ori_file, &temp, 0.2)?;
+            input_files.push(temp);
         }else{
-            //wavを少し短く 
-            input_files.push(format!("voice/__{}.wav", s)); 
+            //wavの正常な動き
+            let ori_file = format!("voice/__{}.wav", s);
+            let temp = format!("voice/__{}.wav", i);
+            wav_shorter(&ori_file, &temp, 0.2)?;
+            
+            adjust_pitch(&temp, &temp, 0.8)?;
+
+            input_files.push(temp);
         }
     }
     let output_file = "output.wav";
@@ -71,8 +85,11 @@ fn createWav(input_string: &str) -> Result<()> {
     Ok(())
 }
 
-fn main() -> Result<()>{
-    let input_string = "konni iueo";
-    createWav(input_string)?; 
+fn main() -> hound::Result<()>{
+    let mut input_string = String::new();
+    io::stdin().read_line(&mut input_string).expect("inout error");
+    let input = input_string.trim();
+
+    createWav(input)?; 
     Ok(())
 }
