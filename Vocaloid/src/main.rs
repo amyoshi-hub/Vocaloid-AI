@@ -1,7 +1,17 @@
 use hound::{WavReader, WavWriter, Result};
 
-fn main() -> Result<()> {
-    let input_files = vec!["a.wav", "b.wav", "c.wav"];
+fn createWav(input_string: &str) -> Result<()> {
+    let mut input_files = Vec::new();
+    for ch in input_string.chars() {
+        if(ch == " "){
+            //少し空白
+        }else if(ch == "-"){
+            input_files.push(format!("voice/__{}.wav", ch)); 
+        }else{
+            //wavを少し短く 
+            input_files.push(format!("voice/__{}.wav", ch)); 
+        }
+    }
     let output_file = "output.wav";
 
     let spec = WavReader::open(&input_files[0])?.spec();
@@ -16,5 +26,11 @@ fn main() -> Result<()> {
 
     output.finalize()?; // 必須
     println!("✅ 結合完了: {}", output_file);
+    Ok(())
+}
+
+fn main() -> Result<()>{
+    let input_string = "aiueo";
+    createWav(input_string)?; 
     Ok(())
 }
