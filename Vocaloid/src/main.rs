@@ -58,8 +58,8 @@ fn emotion_to_pitch(p: &[f32]) -> f32 {
                     emotion -= val;
                 }
             }
-            let ratio = 1.0 + emotion / 100.0;
-            ratio.clamp(0.5, 1.3)
+            let ratio = 1.0 + emotion / 1000.0 / 7.0;
+            ratio.clamp(0.5, 1.1)
 }
 
 
@@ -96,6 +96,7 @@ fn create_wav(words: &[String], params: &[Vec<f32>]) -> hound::Result<()> {
 
         let adjusted_file = format!("temp/pitched_{}.wav", i);
         let pitch = emotion_to_pitch(&params[i]);
+        println!("{}", pitch);
 
         wav_shorter(&temp_main, &adjusted_file, pitch)?;
         adjust_pitch(&adjusted_file, &adjusted_file, pitch)?;
@@ -115,7 +116,7 @@ fn create_wav(words: &[String], params: &[Vec<f32>]) -> hound::Result<()> {
     }
 
     output.finalize()?;
-    println!("✅ 結合完了: {}", output_file);
+    println!("結合完了: {}", output_file);
     Ok(())
 }
 
