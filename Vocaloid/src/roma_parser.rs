@@ -33,7 +33,8 @@ pub fn split_romaji(input: &str) -> Vec<String> {
     ];
     let three_syllables = [
     "kya", "kyu", "kyo",
-    "sha", "shu", "sho",
+    "sha", "shi", "shu",
+    "she", "sho", "sha",//shaは見た目上の都合残す
     "cha", "chu", "cho",
     "nya", "nyu", "nyo",
     "hya", "hyu", "hyo",
