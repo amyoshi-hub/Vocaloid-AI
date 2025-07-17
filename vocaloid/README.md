@@ -91,5 +91,5 @@ pub fn emotion_vocaloid() -> Result<(), hound::Error>{
 word,param1,param2,...param14
 
 ## ⚡Please dowmload vioce dirctory
-- https://github.com/amyoshi-hub/Vocaloid-AI/tree/main/vocaloid/voice
+- https://github.com/amyoshi-hub/Vocaloid-AI/tree/main/vocaloid
 - install voice cargo.toml dir
