@@ -93,3 +93,6 @@ pub fn emotion_vocaloid() -> Result<(), hound::Error>{
 
 ## lyrics format
 word,param1,param2,...param14
+
+## please dowmload vioce dirctory
+- https://github.com/amyoshi-hub/Vocaloid-AI/tree/main/vocaloid/voice
