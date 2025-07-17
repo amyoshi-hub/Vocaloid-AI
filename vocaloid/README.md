@@ -2,9 +2,6 @@
 This crate provides a real-time voice synthesis interface using WAV files and emotion parameters.
 Designed for Raspberry Pi and AI-driven Vocaloid applications.
 
-## Usage
-Add this to your `Cargo.toml`:
-
 toml
 vocaloid = "0.1.0"
 
@@ -15,8 +12,7 @@ emotion_vocaloid()
 vocaloid()
 - util vocaloid
 
-## Demo code
-main
+## Exsample
 ```rs
 use std::error::Error;
 
@@ -91,8 +87,9 @@ pub fn emotion_vocaloid() -> Result<(), hound::Error>{
 }
 ```
 
-## lyrics format
+## Lyrics format
 word,param1,param2,...param14
 
-## please dowmload vioce dirctory
+## ⚡Please dowmload vioce dirctory
 - https://github.com/amyoshi-hub/Vocaloid-AI/tree/main/vocaloid/voice
+- install voice cargo.toml dir
