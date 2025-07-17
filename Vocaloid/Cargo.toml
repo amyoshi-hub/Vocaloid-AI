@@ -1,8 +1,0 @@
-[package]
-name = "Vocaloid"
-version = "0.1.0"
-edition = "2024"
-
-[dependencies]
-fileio_handle = "0.1.0"
-hound = "3.5.1"

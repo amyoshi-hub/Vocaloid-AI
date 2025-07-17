@@ -1,0 +1,1 @@
+/home/amyoshi9/git/Vocaloid-AI/Vocaloid/target/debug/vocaloid: /home/amyoshi9/git/Vocaloid-AI/Vocaloid/src/lib.rs /home/amyoshi9/git/Vocaloid-AI/Vocaloid/src/main.rs /home/amyoshi9/git/Vocaloid-AI/Vocaloid/src/roma_parser.rs
