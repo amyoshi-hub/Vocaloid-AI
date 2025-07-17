@@ -1,1 +1,0 @@
-/home/amyoshi9/git/Vocaloid-AI/vocaloid/target/package/vocaloid-0.1.0/target/debug/vocaloid: /home/amyoshi9/git/Vocaloid-AI/vocaloid/target/package/vocaloid-0.1.0/src/lib.rs /home/amyoshi9/git/Vocaloid-AI/vocaloid/target/package/vocaloid-0.1.0/src/main.rs /home/amyoshi9/git/Vocaloid-AI/vocaloid/target/package/vocaloid-0.1.0/src/roma_parser.rs
