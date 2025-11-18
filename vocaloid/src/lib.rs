@@ -3,6 +3,8 @@ use hound::{WavReader, WavWriter, WavSpec, SampleFormat};
 mod roma_parser;
 use roma_parser::split_romaji;
 use fileio_handle::FileIO;
+use crate::roma_parser::hiragana_to_romaji;
+
 
 pub fn wav_shorter(input_path: &str, output_path: &str, ratio: f32) -> hound::Result<()> {
     let mut reader = WavReader::open(input_path)?;
@@ -45,27 +47,27 @@ pub fn adjust_pitch(input_path: &str, output_path: &str, pitch_ratio: f32) -> ho
 }
 
 pub fn emotion_to_pitch(p: &[f32]) -> f32 {
-            //14このパラメーターのうち７こはプラスなのでpitchは高くゆっくりに
-            if p.is_empty() {
-                return 1.0;
-            }
-            let half = p.len() / 2;
-            let mut emotion = 0.0;
-            for (i, val) in p.iter().enumerate() {
-                if i >= half {
-                    emotion += val;
-                }else{
-                    emotion -= val;
-                }
-            }
-            let ratio = 1.0 + emotion / 1000.0 / 7.0;
-            ratio.clamp(0.5, 1.1)
+    //14このパラメーターのうち７こはプラスなのでpitchは高くゆっくりに
+    if p.is_empty() {
+        return 1.0;
+    }
+    let half = p.len() / 2;
+    let mut emotion = 0.0;
+    for (i, val) in p.iter().enumerate() {
+        if i >= half {
+            emotion += val;
+        }else{
+            emotion -= val;
+        }
+    }
+    let ratio = 1.0 + emotion / 1000.0 / 7.0;
+    ratio.clamp(0.5, 1.1)
 }
 
 
 pub fn create_word_wav(word: &str, temp: &str) -> hound::Result<()>{
     let syllables = split_romaji(word);
-    let out_file = format!("{}.wav", word);
+    let _out_file = format!("{}.wav", word); // 変数名の先頭にアンダースコアを追加して警告を抑制
     let spec = WavReader::open(format!("voice/__{}.wav", syllables[0]))?.spec();
     let mut writer = WavWriter::create(temp, spec)?;
 
@@ -145,29 +147,33 @@ pub fn emotion_vocaloid() -> Result<(), hound::Error>{
 
     println!("{:?}", words);
     println!("{:?}", params);
+    
+    // 修正2: words (Vec<String>, 日本語の単語リスト)を
+    // イテレートして、一つずつhiragana_to_romajiに渡し、RomajiのVec<String>を生成
+    let roma_c: Vec<String> = words.iter()
+        .map(|word| hiragana_to_romaji(word))
+        .collect();
 
-    create_wav(&words, &params)?;
+    println!("{:?}", roma_c);
+    create_wav(&roma_c, &params)?;
     Ok(())
 
 }
 
 
-pub fn vocaloid() -> Result<(), hound::Error> {
-    use std::io::{self, BufRead};
+// 修正1: Rustの関数引数は `変数名: 型` の形式で定義します
+pub fn vocaloid(text: &str) -> Result<(), hound::Error> {
 
-    println!("歌わせたい文字列を入力してください:");
-    let stdin = io::stdin();
-    let input = stdin.lock().lines().next().unwrap_or_else(|| Ok(String::new()))?;
-
+    let input = hiragana_to_romaji(text);
+    println!("{}", input);
     let words: Vec<String> = input
         .trim()
         .split_whitespace()
         .map(|s| s.to_string())
         .collect();
 
-    let params: Vec<Vec<f32>> = vec![vec![0.0; 14]; words.len()];  // 感情パラメータ無し＝フラット
+    let params: Vec<Vec<f32>> = vec![vec![5.0; 14]; words.len()];  // 感情パラメータ無し＝フラット
 
     create_wav(&words, &params)?;
     Ok(())
 }
-
